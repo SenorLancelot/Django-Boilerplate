@@ -29,3 +29,22 @@ services:
       - .env
     ports:
       - "8000:8000"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  
+  celery:
+    build: .
+    command: celery -A config worker --loglevel=info
+    depends_on:
+      redis:
+        condition: service_started
+
+  celery-beat:
+    build: .
+    command: celery -A config beat --loglevel=info
+    depends_on:
+      redis:
+        condition: service_started
