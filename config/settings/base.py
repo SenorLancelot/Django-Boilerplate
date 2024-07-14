@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from decouple import config
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +23,14 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+# settings.py
+
+CELERY_BEAT_SCHEDULE = {
+    'daily-notification': {
+        'task': 'recipe.tasks.daily_notification_task',
+        'schedule': timedelta(seconds=10),  # every 10 seconds
+    },
+}
 
 # Application definition
 
